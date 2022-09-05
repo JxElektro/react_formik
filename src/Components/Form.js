@@ -3,27 +3,47 @@ import '../App.css';
 
 function Form() {
 
-  const [user, setUser] = useState({ name: "", id: "", email: "" })
+  const [user, setUser] = useState({ name:"", id:"", email:""});
+  const [errors, setErrors] = useState({ })
+
+  function validate() {
+    let errors = {} ;
+    if(!user.name) {
+      errors.name = "Debe llenar el campo de nombre"
+      console.log(errors.name)
+    }
+    return errors
+  }
 
   function handleSubmit(e) {
     e.preventDefault()
-    console.log(user)
-    setUser({
-      name: "",
-      id: "",
-      email: ""
-    })
+    if (
+      !errors.hasOwnProperty("name")
+    ) {
+      console.log(user.name)
+      console.log("Registrado")
+      /*setUser({
+        name: "",
+        id: "",
+        email: ""
+      })*/
+    } else {
+      console.log(user.name)
+      console.log("No Registrado")
+    }
   }
 
   function handleChange(e) {
     e.preventDefault()
-
     setUser({
       ...user,
       [e.target.name]: e.target.value,
     })
+    setErrors(validate({
+      ...user,
+      [e.target.name]: e.target.value
+    }))
   }
-
   return (
 
     <section className="form" >
@@ -33,16 +53,18 @@ function Form() {
         <input
           type="Text"
           placeholder="Nombre.."
-          autoComplete="on"
+          autoComplete="off"
           value={user.name}
           name="name"
           onChange={(e) => handleChange(e)}
         />
-        <label> ID : </label>
+        {errors.name && (<p>{errors.name}</p>)}
+
+        <label> iD : </label>
         <input
           type="Number"
           placeholder="ID.."
-          autoComplete="on"
+          autoComplete="off"
           onChange={(e) => handleChange(e)}
           value={user.id}
           name="id"
@@ -51,7 +73,7 @@ function Form() {
         <input
           type="Email"
           placeholder="User@Email.com.."
-          autoComplete="on"
+          autoComplete="off"
           onChange={(e) => handleChange(e)}
           value={user.email}
           name="email"
